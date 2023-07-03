@@ -1,6 +1,7 @@
 inst/doc
 .R*
 *.swp
-bin/dealer
+ukbphewas/bin/dealer
 *.egg-info
 *.pyc
+test_algo
