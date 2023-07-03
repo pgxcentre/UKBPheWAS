@@ -1,3 +1,6 @@
+"""The conductor."""
+
+
 import re
 import os
 import shutil
@@ -10,7 +13,6 @@ import argparse
 import multiprocessing
 
 import numpy as np
-import pandas as pd
 
 import zmq
 
@@ -21,14 +23,14 @@ except ImportError:
 
 
 from .configuration import Configuration
-from . import bin
+from . import bin as dealer_bin
 from . import Rpkg
 from .serdef import serialize
 from .generators import *
 
 
 def start_broker():
-    dealer_path = os.path.join(os.path.dirname(bin.__file__), "dealer")
+    dealer_path = os.path.join(os.path.dirname(dealer_bin.__file__), "dealer")
 
     proc = subprocess.Popen([dealer_path], stdout=subprocess.PIPE)
 
@@ -158,7 +160,7 @@ def collect_and_teardown_analysis(output_prefix):
 
 
 def get_unused_analysis_id(tries=0):
-    id = str(uuid.uuid4())[:5]
+    id = str(uuid.uuid4())
 
     if tries >= 200:
         raise RuntimeError("Couldn't find an unused analysis id.")
