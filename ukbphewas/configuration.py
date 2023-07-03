@@ -36,6 +36,20 @@ class DoBinaryLRT(DoBinary):
         super().__init__(*args, **kwargs)
 
 
+class DoBinaryLRTInteraction(DoBinary):
+    def __init__(self, augmented_variables, augmented_interaction_variables,
+                 xpcs_path, *args, **kwargs):
+        self.worker_script = os.path.abspath(os.path.join(
+            os.path.dirname(Rpkg.__file__),
+            "R", "logistic_deviance_diff_test_interaction_worker.R"
+        ))
+
+        self.augmented_variables = augmented_variables
+        self.augmented_interaction_variables = augmented_interaction_variables
+        self.xpcs_path = xpcs_path
+        super().__init__(*args, **kwargs)
+
+
 class DoBinaryDescriptive(DoBinary):
     def __init__(self, *args, **kwargs):
         self.worker_script = os.path.abspath(os.path.join(
@@ -73,6 +87,19 @@ class DoFTest(DoLinear):
             "R", "linear_f_test_worker.R"
         ))
         self.augmented_variables = augmented_variables
+        self.xpcs_path = xpcs_path
+
+
+class DoFTestInteraction(DoLinear):
+    """F test with interaction."""
+    def __init__(self, augmented_variables, augmented_interaction_variables,
+                 xpcs_path):
+        self.worker_script = os.path.abspath(os.path.join(
+            os.path.dirname(Rpkg.__file__),
+            "R", "linear_f_test_interaction_worker.R"
+        ))
+        self.augmented_variables = augmented_variables
+        self.augmented_interaction_variables = augmented_interaction_variables
         self.xpcs_path = xpcs_path
 
 
