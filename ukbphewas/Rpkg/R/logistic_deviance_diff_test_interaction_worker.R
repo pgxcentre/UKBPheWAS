@@ -87,6 +87,10 @@ logistic_deviance_diff_test_worker <- function(worker_id, ...) {
   base_aug_cols <- c(base_cols, aug_cols)
   base_aug_int_cols <- c(base_aug_cols, aug_int_cols)
 
+  unique_inter_cols <- unique(
+    purrr::flatten(stringr::str_split(aug_int_cols, "[*]"))
+  )
+
   # Callback for when data is to be processed from the queue.
   do.work <- function(metadata, data) {
     data <- deserialize(data)
@@ -117,6 +121,10 @@ logistic_deviance_diff_test_worker <- function(worker_id, ...) {
     dropped_cols <- col_drop_li$dropped_cols
 
     if (length(dropped_cols) != 0) {
+      # Did we drop a required column for interaction?
+      if (length(intersect(dropped_cols, unique_inter_cols)) > 0) {
+        return()
+      }
       base_cols <- base_cols[!(base_cols %in% dropped_cols)]
       base_aug_cols <- base_aug_cols[!(base_aug_cols %in% dropped_cols)]
     }
@@ -150,8 +158,6 @@ logistic_deviance_diff_test_worker <- function(worker_id, ...) {
       print("N controls not equal")
       return()
     }
-
-    # Augmented and Interaction tests
 
     # Creating the matrices for the base and augmented models
     aug_data_matrix <- as.matrix(aug_data_matrix)
