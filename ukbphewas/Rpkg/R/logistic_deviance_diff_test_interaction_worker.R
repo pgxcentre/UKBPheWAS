@@ -177,7 +177,7 @@ logistic_deviance_diff_test_worker <- function(worker_id, ...) {
 
     # Anova
     lrt_aug <- fastglm_anova(fit_base, fit_aug)
-    lrt_inter <- fastglm_anova(fit_base, fit_int)
+    lrt_inter <- fastglm_anova(fit_aug, fit_int)
 
     line <- paste(
       metadata$variable_id,
